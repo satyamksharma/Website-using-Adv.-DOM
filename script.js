@@ -90,3 +90,28 @@ const handleHover = function (e, opacity) {
 nav.addEventListener('mouseover', handleHover.bind(0.5)); // using bind method to get new function as 2nd parameter is to be a functio with opacity passed as parameter which we can't do normally
 
 nav.addEventListener('mouseout', handleHover.bind(1));
+
+// Sticky navigation
+
+// Method 1
+/* const initialCoords = section1.getBoundingClientRect();
+window.addEventListener('scroll', function () {
+    if (this.window.scrollY > initialCoords.top) nav.classList.add('sticky');
+    else nav.childElementCount.remove('sticky');
+});
+ */
+
+//Method #2 intersection observer API
+const header = document.querySelector('.header');
+
+const stickyNav = function (entries) {
+    const [entry] = entries;
+    if (!entry.isIntersecting) nav.classList.add('sticky');
+    else nav.classList.remove('sticky');
+};
+const headerObserver = new IntersectionObserver(stickyNav, {
+    root: null,
+    threshold: 0,
+    rootMargin: '-90px', // percentage or rem doesn't work
+});
+headerObserver.observe(header);
