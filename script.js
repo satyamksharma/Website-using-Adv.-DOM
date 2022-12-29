@@ -40,10 +40,35 @@ btnScrollTo.addEventListener('click', function (e) {
 
 //Page Navigation
 
-document.querySelectorAll('.nav__link').forEach(function (el) {
-    el.addEventListener('click', function (e) {
-        e.preventDefault();
-        const id = this.getAttribute('href');
+// Using event delegation
+//1. Add event listener to common parent element
+// 2. Determine what element originated the event
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+    e.preventDefault();
+    // Matching strategy
+    if (e.target.classList.contains('nav__link')) {
+        const id = e.target.getAttribute('href');
         document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
-    });
+    }
+});
+
+// Tabbed Component
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+
+tabsContainer.addEventListener('click', function (e) {
+    e.preventDefault();
+    const clicked = e.target.closest('.operations__tab');
+
+    //Guard clause
+    if (!clicked) return;
+    // Active tab
+    tabs.forEach((t) => t.classList.remove('operations__tab--active'));
+
+    clicked.classList.add('operations__tab--active');
+
+    // Activate tab content
+    tabsContent.forEach((t) => t.classList.remove('operations__content--active'));
+    document.querySelector(`.operations__content--${clicked.dataset.tab}`).classList.add('operations__content--active');
 });
